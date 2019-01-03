@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>My todolist</title>
+        <style>
+            a {text-decoration: none;
+               color: black;
+               float: right;
+               margin-right: 5px;
+               top: 5px;
+               }
+               ul, ul li {
+                   width: 200px;
+               }
+               li{
+                   list-style-type: none;
+                   height: 50px;
+                   border: 1px solid #000;
+                   text-align: center;
+                   box-sizing: border-box;
+                   padding-top: 15px;
+               }
+            li input {display: none;}
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+        <script>
+          function f1(index)
+          {
+            var noz = $("#em" + index).text();
+            if (noz == ''){
+               window.location.href = "/todo/"
+            }
+            //$("#links" + index).attr("href", "/todo/update/"+ index + "/" + noz);
+            //var al = $("#links" + index).attr('href');
+            //alert("/todo/update/"+index+ "/" + noz);
+            window.location.href = "/todo/update/"+ index + "/" + noz;
+          }
+
+          $(function(){
+                var removeIntent = false;
+                $('#sortme').sortable({
+                    over: function () {
+                        removeIntent = false;
+                    },
+                    out: function () {
+                        removeIntent = true;
+                    },
+                    beforeStop: function (event, ui) {
+                        if(removeIntent == true){
+                            alert('removing item');
+                            //ui.item.remove();
+                        }
+                    }
+                });
+            });
+
+        </script>
+    </head>
+     <body>
+        <h1>My todolist</h1>
+
+        <ul id ='sortme'>
+        <% todolist.forEach(function(todo, index) { %>
+          <li>
+              <em id="em<%= index %>" onblur="f1('<%= index %>','em<%= index %>');" ondblclick="$(this).attr('contenteditable',true);$(this).focus();">
+              <%= todo %></em>
+              <input type="text" onblur="f1('<%= index %>','edit<%= index %>');" id="edit<%= index %>"/>
+              <a href="/todo/delete/<%= index %>">[-]</a>
+          </li>
+        <% }) %>
+        </ul>
+
+        <form id="dform" action="/todo/add/" method="post">
+            <p>
+                <label for="newtodo">What should I do?</label>
+                <input type="text" name="newtodo" id="newtodo" autofocus />
+                <input type="submit"/>
+            </p>
+        </form>
+    </body>
+</html>
