@@ -1,7 +1,6 @@
 var express =  require('express');
 var session = require('cookie-session');
-var bodyParser = require('body-Parser');
-var urlencodedParser = require('urlencoded-parser'); // ES5
+var bodyParser = require('body-parser');
 
 var app = express();
 app.use(session({secret: 'todotopsecret'}))
@@ -20,7 +19,7 @@ next();
 })
 
 /* Adding an item to the to do list */
-.post('/todo/add/',urlencodedParser,function(req, res) {
+.post('/todo/add/',function(req, res) {
   console.log('adding to list');
     if (req.body.newtodo != '') {
         req.session.todolist.push(req.body.newtodo);
